@@ -1,0 +1,21 @@
+{% for data in company_details %}
+    <tr>
+    <td>
+        {{ data.name }}
+    </td>
+    <td>
+        <button type="button"
+                class="btn btn-warning btn-sm js-update-company"
+                data-url="{% url 'company-update' data.id %}">
+            <i class="fa  fa-pencil"></i>Update
+        </button>
+
+        <button type="button"
+                class="btn btn-danger btn-sm js-delete-company"
+                data-url="{% url 'company-delete' data.id %}">
+            <i class="fa  fa-trash-o"></i>Delete
+        </button>
+
+    </td>
+    </tr>
+{% endfor %}

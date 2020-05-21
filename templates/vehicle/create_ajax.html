@@ -1,0 +1,31 @@
+{% load crispy_forms_tags %}
+{% load static %}
+
+    {% block jquery %}
+        <script src="{% static 'js/vehicles/manufacturer.js'%}"></script>
+    {% endblock %}
+
+{% block content %}
+
+    {% load widget_tweaks %}
+
+    <form method="post" id="vehicleForm" enctype="multipart/form-data" action="{% url 'vehicle-create' %}"
+          class="js-vehicle-create-form" data-model-url="{% url 'ajax-load-models' %}">  {% csrf_token %}
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title ">Create A New Vehicle</h4>
+        </div>
+        <div class="modal-body">
+
+            {{ vehicle_form|crispy }}
+            {{ vehicle_form.management_form }}
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Create New Vehicle</button>
+        </div>
+    </form>
+{% endblock content%}

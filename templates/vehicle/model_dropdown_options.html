@@ -1,0 +1,5 @@
+<option value=""></option>
+
+{% for model in models %}
+    <option value="{{ model.pk }}"> {{ model.name }} {{ model.litre }} {{ model.year }}</option>
+{% endfor %}

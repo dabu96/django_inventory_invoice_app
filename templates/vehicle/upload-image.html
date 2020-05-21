@@ -1,0 +1,39 @@
+{% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div id="form">
+            <input type="file" id="input" name="img_0" value="0">
+        </div>
+
+
+        <input type="button" value="Add More" id="add_more">
+        <button class="btn btn-primary" type="submit">Upload Image</button>
+
+    </form>
+
+    <script>
+        $(document).ready(function () {
+            $('#add_more').click(function () {
+
+                var imageField = document.getElementById("input");
+                var imageCount = imageField.getAttribute("value");
+
+                imageCount++;
+                imageField.setAttribute("value", imageCount);
+
+                var newImageField = document.createElement("input");
+                newImageField.setAttribute("type", "file");
+                newImageField.setAttribute("name", "img_" + imageCount);
+                document.getElementById('form').appendChild(newImageField);
+
+            });
+
+
+        });
+    </script>
+{% endblock %}
+

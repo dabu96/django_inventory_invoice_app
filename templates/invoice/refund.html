@@ -1,0 +1,32 @@
+{% load static %}
+<form method="POST" action="{% url 'invoice-refund' invoice.id %}" class="js-invoice-refund-form">
+    {% csrf_token %}
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Confirm Invoice Refund</h4>
+    </div>
+    <div class="modal-body">
+        <p class="lead">Are you sure you want to refund the invoice <strong>
+            {{ invoice }} for {{ invoice.customer }}</strong>?</p>
+
+        <p style="list-style-type: none"> Choose which parts to refund:
+            {{ parts_select }}
+        </p>
+
+        <p class="bg-warning">Refunded parts will be added back to stock. Ensure parts have been received before
+            confirmation.</p>
+
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-danger">Refund</button>
+    </div>
+</form>
+
+<style> ul {
+    list-style-type: none;
+}
+</style>

@@ -1,0 +1,15 @@
+ <div id="filter-content" class="sidebar" style="position: sticky; top: 100px;" >
+            <h3>Filter and Search</h3>
+            <p class='text-muted'>Filter by manufacturers
+              <ul class="list-group">
+
+              {% for manufacturer in manufacturers %}
+                  {{ manufacturer }}
+              {% endfor %}
+                <li class="list-group-item list-group-item-light">Latest Posts</li>
+                <li class="list-group-item list-group-item-light">Announcements</li>
+                <li class="list-group-item list-group-item-light">Calendars</li>
+                <li class="list-group-item list-group-item-light">etc</li>
+              </ul>
+            </p>
+          </div>

@@ -1,0 +1,256 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+    <style type="text/css">
+
+        @page {
+            size: a4 landscape;
+            margin-left: 2cm;
+            @frame content_frame {
+            -pdf-frame-content: customer;
+            top: 53pt;
+            left: 25pt;
+        }
+
+        @frame company_frame {
+        -pdf-frame-content:company;
+        left: 700pt;
+        top: 53pt;
+        }
+
+        @frame line1_frame {
+        -pdf-frame-content:line;
+        top: 200pt;
+        }
+
+        @frame table_container_frame {
+        -pdf-frame-content:table-container;
+        top:205pt;
+        }
+
+        @frame calculation_frame {
+        -pdf-frame-content:calculation;
+        left:650pt;
+        top:400pt;
+        }
+
+        @frame part_frame {
+        -pdf-frame-content:part;
+        top: 225pt;
+        left: 25pt;
+        }
+
+        @frame line2_frame {
+        -pdf-frame-content:line2;
+        top: 395pt;
+        }
+
+        @frame footer_frame {
+        -pdf-frame-content:footer_content;
+        left: 50pt;
+        width: 512pt;
+        top: 400pt;
+        }
+
+
+        }
+
+        #customer {
+            height: 500pt;
+        }
+
+        body {
+            font-weight: 200;
+            font-size: 14px;
+        }
+
+        .title {
+            padding-top: 25px;
+            text-align: center;
+            color: #007cae;
+            font-size: 20px;
+        }
+
+
+        #line, #line2 {
+            height: 1px;
+            background-color: #fff;
+        }
+
+        .separator {
+            margin: 94px;
+            -pdf-keep-with-next: false;
+        }
+
+        #table-container {
+            left: 100pt;
+        }
+
+        .table, td, th {
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+
+        .table th, td {
+            padding: 5px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+    <p class='title'>Invoice {{ invoice.reference }} </p>
+
+    <div id='customer'>
+        <b>Bill to</b>: {{ invoice.customer.get_title_display }} {{ invoice.customer }} <br/>
+        <b>Deliver to</b>: <br/>
+        {{ invoice.customer.address_line }} <br/>
+        {% if invoice.customer.address_line2 %}
+            {{ invoice.customer.address_line2 }} <br/>
+        {% endif %}
+        {{ invoice.customer.post_code }} <br/>
+        {{ invoice.customer.country }} <br/>
+
+        <b>Payment Type</b>: {{ invoice.customer.get_payment_type_display }} <br/>
+
+        {% if invoice.customer.card_number %}
+            <b>Card number</b>: XXXX-XXXX-XXXX-{{ invoice.customer.card_number }} <br/>
+        {% endif %}
+        <b>Date</b>: {{ invoice.date_created }} <br/>
+    </div>
+
+
+    <div id='company'>
+        <b> Company Details </b><br>
+        {{ company.name }}<br/>
+        {{ company.address_line1 }} <br/>
+        {% if company.address_line2 %}
+            {{ company.address_line2 }} <br/>
+        {% endif %}
+        {{ company.post_code }} <br/>
+        {{ company.country }} <br/>
+        {{ company.telephone }} <br/>
+        {{ company.website }} <br/>
+        VAT Ref: {{ company.vat }} <br/>
+    </div>
+
+    <div>
+        <hr id="line"/>
+    </div>
+
+    <p class="separator">&nbsp;</p>
+
+
+    <div id="table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>
+                    Part Name
+                </th>
+                <th>
+                    Part Side
+                </th>
+                <th>
+                    Vehicle
+                </th>
+
+                <th>
+                    Quantity
+                </th>
+
+                <th>
+                    Price
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for part in parts %}
+                <tr>
+                    <td>
+                        {{ forloop.counter }}
+                    </td>
+                    {% if part.part.side %}
+                        <td>
+                            {{ part.part.name }}
+                        </td>
+
+                        <td>
+                            {{ part.part.side }}
+                        </td>
+                        <td>
+                            {{ part.part.vehicle }}
+                        </td>
+
+                        <td>
+                            1
+                        </td>
+
+                        <td>
+                            £{{ part.part.selling_price }}
+                        </td>
+                    {% else %}
+
+                        <td>
+                            {{ part.part.name }}
+                        </td>
+
+                        <td>
+                            -
+                        </td>
+
+                        <td>
+                            {{ part.part.vehicle }}
+                        </td>
+
+                        <td>
+                            1
+                        </td>
+
+                        <td>
+                            £{{ part.part.selling_price }}
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <hr id="line2"/>
+    </div>
+
+    <div id="footer_content" class="headerContainer">
+        <div id='guarantee'>
+            <b> Guarantee Policy</b> <br>
+            {{ company.guarantee_policy }}<br/>
+        </div>
+
+        {% if company.extra_info %}
+            <div id='extra_info'>
+                <b>Additional information </b><br>
+                {{ company.extra_info }}<br/>
+            </div>
+        {% endif %}
+
+        <div id="calculation">
+            <div>
+                <b> Delivery cost</b>: £{{ invoice.delivery }} <br/>
+                <b>Total cost</b>(excluding VAT): £{{ invoice.total_cost }} <br/>
+                <b>VAT</b>: {{ invoice.sale_tax_percent }}% <br/>
+                <b>Total cost</b>(including VAT): £{{ invoice.total_cost_inc_vat }}
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>

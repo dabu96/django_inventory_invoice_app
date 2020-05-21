@@ -1,0 +1,177 @@
+
+{% load widget_tweaks %}
+{% load static %}
+    <form method="post" id="form" class="form" role="form" action="{% url 'vehicle-model-create' %}">
+      {% csrf_token %}
+        {{ form.management_form }}
+    <div class="modal" id="modelModal"></div>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Create a new vehicle model</h4>
+      </div>
+      <div class="modal-body">
+        {% for field in form %}
+          <div class="form-group{% if field.errors %} has-error{% endif %}">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {% render_field field class="form-control" %}
+            {% for error in field.errors %}
+              <p class="help-block">{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" id="create-model">Create Model</button>
+      </div>
+    </div>
+    </form>
+
+<form method="post" id="form_manufacturer" class="form" role="form" action="{% url 'vehicle-manufacturer-create' %}">
+      {% csrf_token %}
+        {{ form.management_form }}
+    <div class="modal" id="manufacturerModal" data-backdrop="static">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Manufacturer create</h4>
+                  <button type="button" class="close" data-dismiss="modal">×</button>
+                </div><div class="container"></div>
+                <div class="modal-body">
+{#                    <a data-toggle="modal" href="#manufacturerModal" class="btn btn-primary">Launch modal</a>#}
+
+                    {% for field in manufacturer_form %}
+                          <div class="form-group{% if field.errors %} has-error{% endif %}">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {% render_field field class="form-control" %}
+                            {% for error in field.errors %}
+                              <p class="help-block">{{ error }}</p>
+                            {% endfor %}
+                          </div>
+                    {% endfor %}
+
+{#                  {% include 'vehicle/create.html' %}#}
+                </div>
+                <div class="modal-footer">
+                  <a href="#" data-dismiss="Modal" class="btn">Close</a>
+{#                  <a href="#" class="btn btn-primary">Save changes</a>#}
+                       <button type="submit"  class="btn btn-primary" id="create-manufacturer">Create Model</button>
+
+                </div>
+              </div>
+            </div>
+    </div>
+</form>
+
+{% block qjuery %}
+    <script src="{% static 'js/my_js.js' %}"></script>
+{% endblock qjuery %}
+
+
+
+{#    <script type="text/javascript">#}
+{#    var frm = $('#form');#}
+{#    var manuf_form = $('#form_manufacturer')#}
+{##}
+{#        frm.submit(function () {#}
+{#        $.ajax({#}
+{#            type: frm.attr('method'),#}
+{#            url: frm.attr('action'),#}
+{#            data :frm.serialize(),#}
+{##}
+{#            success: function (data) {#}
+{#                console.log(data)#}
+{#                $("#modal").modal("hide")#}
+{#                $('.modal-backdrop').remove()#}
+{#                window.location.reload(true);#}
+{#            },#}
+{#            error: function (data) {#}
+{#                console.log(data)#}
+{#                console.log('error msg')#}
+{#            }#}
+{#        });#}
+{##}
+{#        return false;#}
+{#    });#}
+{##}
+{##}
+{#    manuf_form.submit(function () {#}
+{#            $.ajax({#}
+{#                type: manuf_form.attr('method'),#}
+{#                url: manuf_form.attr('action'),#}
+{#                data :manuf_form.serialize(),#}
+{#                success: function (data) {#}
+{#                    console.log(data)#}
+{#                    $("#manufacturerModal").modal("hide")#}
+{#                    $('.modal-backdrop').remove()#}
+                    {#window.location.reload(true);                    console.log('k')#}
+{##}
+{#                },#}
+{#                error: function (data) {#}
+{#                    console.log(data)#}
+{#                    console.log('error msg')#}
+{#                }#}
+{#            });#}
+{#            return false;#}
+{#        });#}
+
+      {#  $("#add_manufacturer").on("click",function (e) {#}
+      {#      e.preventDefault();#}
+      {#      $.ajax({#}
+      {#        url: '/inventory/vehicles/manufacturer/create/$/',#}
+      {#        type: 'get',#}
+      {#        dataType: 'json',#}
+      {#        beforeSend: function () {#}
+      {#          $("#manufacturerModal").modal("show");#}
+      {#          console.log('here')#}
+      {#        },#}
+      {#        success: function (data) {#}
+      {#          $("#manufacturerModal .modal-content").html(data.html_form).modal("show");#}
+      {#          console.log('here to')#}
+      {##}
+      {#        }#}
+      {#      });#}
+      {#});#}
+    {#</script>#}
+{#<style>#}
+{#    .modal:nth-of-type(even) {#}
+{#    z-index: 1052 !important;#}
+{#}#}
+{#.modal-backdrop.show:nth-of-type(even) {#}
+{#    z-index: 1051 !important;#}
+{#}#}
+{#</style>#}
+
+  {#  $("#create-model").click(function (e) {#}
+  {#  e.preventDefault()#}
+  {#  console.log('hello')#}
+  {#  $.ajax({#}
+  {#    url: '/inventory/vehicles/test/$',#}
+  {#    type: 'post',#}
+  {#    dataType: 'json',#}
+  {#    beforeSend: function () {#}
+  {#      $("#modal").modal("show");#}
+  {#    },#}
+  {#    success: function (data) {#}
+  {#      $("#modal .modal-content").html(data.html_form).modal("show");#}
+  {#    }#}
+  {#  });#}
+  {# });#}
+
+
+
+
+{#{% load crispy_forms_tags %}#}
+{#    <div class="model_form">#}
+{#    {{ title }}#}
+{#    <form method="post">#}
+{#        {% csrf_token %}#}
+{#        {{ form|crispy }}#}
+{#        <input type="text" name="name" placeholder="enter name">#}
+{#        <input type="submit" value="Save"/>#}
+{##}
+{#    </form>#}
+{#    </div>#}
+

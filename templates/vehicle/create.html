@@ -1,0 +1,58 @@
+{% extends "base/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block jquery %}
+    <script src="{% static 'js/vehicles/manufacturer.js'%}"></script>
+{% endblock %}
+
+{% block content %}
+
+    <form method="post" id="vehicleForm" enctype="multipart/form-data" action="{% url 'vehicle-create' %}"
+          class="js-vehicle-create-form" data-model-url="{% url 'ajax-load-models' %}" novalidate>  {% csrf_token %}
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title ">Create A New Vehicle</h4>
+        </div>
+        <div class="modal-body">
+
+            {% for field in form %}
+                <div class="form-group{% if field.errors %} has-error{% endif %}">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {% render_field field class="form-control" %}
+                    {% for error in field.errors %}
+                        <p class="help-block">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            {{ image_formset.management_form }}
+
+            <div id="form_set">
+                {% for form in image_formset.forms %}
+                    {{form.non_field_errors}}
+                    {{form.errors}}
+                    <table class='no_error'>
+                        {{ form }}
+                    </table>
+                {% endfor %}
+            </div>
+
+            <input type="button" value="Add More" id="add_more">
+            <div id="empty_form" style="display:none">
+                <table class='no_error'>
+                    {{ image_formset.empty_form }}
+                </table>
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Create New Vehicle</button>
+        </div>
+    </form>
+{% endblock content%}

@@ -1,0 +1,95 @@
+{% extends "base/base.html" %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block jquery %}
+    <script src="{% static 'js/Invoices/invoice.js' %}"></script>
+{% endblock %}
+
+{% block filterbar %}
+    <form method="get" class="m-2">
+        <div class="form-row">
+            <div class="form-group col-sm-2 mb-0">
+                {{ invoice_filter.form.customer_surname|as_crispy_field }}
+            </div>
+
+            <div class="form-group col-sm-auto mb-0">
+                {{ invoice_filter.form.customer_other_names|as_crispy_field }}
+            </div>
+
+            <div class="form-group col-sm-auto mb-0">
+                {{ invoice_filter.form.date_created|as_crispy_field }}
+            </div>
+
+            <div class="form-group col-sm-3">
+                {{ invoice_filter.form.reference|as_crispy_field }}
+            </div>
+
+            <div class="form-group col-sm-3">
+                {{ invoice_filter.form.refunded|as_crispy_field }}
+            </div>
+
+            <div class="form-group col-sm-2 m-auto mb-0">
+                <button class=" btn-sm btn-primary w-100" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="m-2">
+        <a class="btn btn-primary" href="{% url 'invoice-create' %}">
+            <i class="fa  fa-plus"></i>Create A New Invoice
+        </a>
+    </div>
+
+
+
+    <div class="wrapper position-relative m-2">
+        {% for invoice, parts_bought in invoices.items %}
+            <article class="media content-section">
+                <div class="media-body">
+                    <div class="article-metadata">
+                        <a class="mr-2">{{ invoice.customer.created_by }}</a>
+                        <small class="text-muted">{{ invoice.date_created }}</small>
+
+                        <button type="button" class="btn btn-toolbar js-delete-invoice"
+                                data-url="{% url 'invoice-delete' invoice.id %}">
+                            <i class="fa  fa-trash"></i>
+                        </button>
+
+                        {% if not invoice.refunded %}
+                            <button type="button" class="btn btn-toolbar js-refund-invoice"
+                                    data-url="{% url 'invoice-refund' invoice.id %}">
+                                <i class="fa  fa-undo">Refund</i>
+                            </button>
+                            </div>
+                        {% endif %}
+
+                    <h2>
+                        <a class="article-title"
+                           href="{% url 'invoice-pdf' invoice.id invoice.slug %}">{{ invoice.customer }}
+                            - {{ invoice.reference }}
+                        </a>
+                    </h2>
+                    <p>
+                        <b>Parts:</b> <br>
+                    <ul>
+                        {% for part_bought in parts_bought %}
+                            <li>
+                                {{ part_bought.part.name }} - {{ part_bought.part.vehicle }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    </p>
+                </div>
+            </article>
+
+        {% endfor %}
+    </div>
+
+{% endblock content %}

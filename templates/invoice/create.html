@@ -1,0 +1,64 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+    <form method="post" action="{% url "invoice-create" %}" class="js-generate-invoice-form">
+        {% csrf_token %}
+        {{ customer_form|crispy }}
+        {{ invoice_formset|crispy }}
+        {{ invoice_formset.management_form }}
+        {{ part_bought_formset.management_form }}
+        <div id="form_set">
+            {% for form in part_bought_formset %}
+                {{ form.non_field_errors }}
+                {{ form.errors }}
+                <table class='no_error'>
+                    <label for="manufacturers_select_{{ forloop.counter|add:"-1" }}">Choose a manufacturer:</label>
+                    <select id="manufacturers_select_{{ forloop.counter|add:"-1" }}" class="manufacturers_select">
+                        <option value="">...............</option>
+                        {% for manufacturer in manufacturers %}
+                            <option value="{{ manufacturer }}">{{ manufacturer }}</option>
+                        {% endfor %}
+                    </select> <br>
+
+                    <label for="vehicles_select_{{ forloop.counter|add:"-1" }}">Choose a vehicle:</label>
+                    <select id="vehicles_select_{{ forloop.counter|add:"-1" }}" class="vehicles_select">
+                        <option value="">...............</option>
+                        {% for vehicle in vehicles %}
+                            <option value="{{ vehicle }}">{{ vehicle }}</option>
+                        {% endfor %}
+                    </select>
+                    {{ form }}
+                </table>
+            {% endfor %}
+        </div>
+        <input type="button" value="Add More" id="add_more">
+        <div id="empty_form" style="display:none">
+            <table class='no_error'>
+                {{ part_bought_formset.empty_form }}
+            </table>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Generate Invoice</button>
+    </form>
+
+    <form data-model-url="{% url 'load-vehicle-models-for-invoice' %}" id="load-models"
+          method="POST" novalidate>
+        {% csrf_token %}
+    </form>
+
+    <form data-model-url="{% url 'load-parts-for-invoice' %}" id="load-parts"
+          method="POST" novalidate>
+        {% csrf_token %}
+    </form>
+    <br/>
+
+{% endblock %}
+
+{% block jquery %}
+    <script src="{% static 'js/Invoices/create.js' %}"></script>
+{% endblock %}

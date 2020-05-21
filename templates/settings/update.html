@@ -1,0 +1,19 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+    <form method="POST" > {% csrf_token %}
+        {{ form }}
+    {{ manufacturer_form }}
+    </form>
+
+
+
+{#        <script src="{% static 'js/my_js.js'%}">#}
+{#            {% block jquery %} {% endblock %}#}
+{#        </script>#}
+
+
+
+{% endblock content%}

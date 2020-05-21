@@ -1,0 +1,124 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+<link rel="stylesheet"  href="{% static 'css/settings/mystyle.css' %}">
+
+
+{#<style type="text/css" href="{% static 'css/settings/mystyle.css' %}"></style>#}
+{% block jquery %}
+    <script src="{% static 'js/settings/manufacturer.js' %}"></script>
+    <script src="{% static 'js/settings/location.js' %}"></script>
+    <script src="{% static 'js/settings/part_category.js' %}"></script>
+    <script src="{% static 'js/settings/company.js' %}"></script>
+{% endblock %}
+
+
+{% block content %}
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" id="manufacturer-collapsible" href="#collapse-manufacturer">Manufacturers
+                        <i class="fa  fa-arrow-circle-down rotate"></i></a>
+                </h4>
+            </div>
+
+            <div id="collapse-manufacturer" class="panel-collapse collapse">
+                <table class="table" id="manufacturer-table">
+                              <p>
+                                  <button type="button" class="btn btn-primary js-create-manufacturer" data-url="{% url 'vehicle-manufacturer-create' %}">
+                                      <i class="fa  fa-plus"></i>
+                                      Add Manufacturer
+                                  </button>
+                              </p>
+
+                    <tbody>
+                    {% include "settings/manufacturer/list.html" %}
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" id="location-collapsible" href="#collapse-location">Locations
+                            <i class="fa  fa-arrow-circle-down rotate"></i></a>
+                    </h4>
+                </div>
+                <div id="collapse-location" class="panel-collapse collapse">
+                    <table class="table" id="location-table">
+                        <p>
+                            <button type="button" class="btn btn-primary js-create-location" data-url="{% url 'location-create' %}">
+                                <i class="fa  fa-plus"></i>Add Location
+                            </button>
+                        </p>
+                        <tbody>
+                        {% include "settings/location/list.html" %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" id="part-category-collapsible" href="#collapse-part-category">Part Categories
+                            <i class="fa  fa-arrow-circle-down rotate"></i></a>
+                    </h4>
+                </div>
+                <div id="collapse-part-category" class="panel-collapse collapse">
+                    <table class="table" id="part-category-table">
+                        <p>
+                            <button type="button" class="btn btn-primary js-create-part-category" data-url="{% url 'part-category-create' %}">
+                                <i class="fa  fa-plus"></i>Add Category
+                            </button>
+                        </p>
+                        <tbody>
+                        {% include "settings/part_category/list.html" %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" id="company-collapsible" href="#collapse-company">Company Details
+                            <i class="fa  fa-arrow-circle-down rotate company"></i></a>
+                    </h4>
+                </div>
+                <div id="collapse-company" class="panel-collapse collapse">
+                    <table class="table" id="company-table">
+                        {% if not company_details %}
+                            <button type="button" class="btn btn-primary js-create-company" data-url="{% url 'company-create' %}">
+                                <i class="fa  fa-plus"></i>Add Company
+                            </button>
+                        {% endif %}
+                        <p>
+
+                        </p>
+                        <tbody>
+                        {% include "settings/company/list.html" %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+    <div class="modal fade" id="modal-input">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+
+
+{% endblock content%}

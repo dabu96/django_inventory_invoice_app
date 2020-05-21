@@ -1,0 +1,92 @@
+{% extends "base/base.html" %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load render_table from django_tables2 %}
+
+{% block jquery %}
+    <script src="{% static 'js/vehicles/vehicles.js' %}"></script>
+{% endblock %}
+
+{% block filterbar %}
+    <form method="get" class="m-2">
+        <div class="form-row">
+            <div class="form-group col-sm-2 mb-0">
+                {{ vehicle_filter.form.sku|as_crispy_field }}
+            </div>
+            <div class="form-group col-sm-auto mb-0">
+                {{ vehicle_filter.form.year|as_crispy_field }}
+            </div>
+            <div class="form-group col-sm-auto mb-0">
+                {{ vehicle_filter.form.model|as_crispy_field }}
+            </div>
+
+            <div class="form-group col-sm-3">
+                {{ vehicle_filter.form.manufacturer|as_crispy_field }}
+            </div>
+
+            <div class="form-group col-sm-2 m-auto mb-0">
+                <button class=" btn-sm btn-primary w-100" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block content %}
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                    {{ message }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form method="POST" id="vehicle-delete" class="js-vehicle-delete-form">
+        {% csrf_token %}
+    </form>
+
+    <div id="vehicle-content">
+        <div class="m-2">
+            <button type="button" class="btn btn-primary js-create-vehicle m-3" data-url="{% url 'vehicle-create' %}">
+                <i class="fa  fa-plus"></i> Add A Vehicle
+            </button>
+
+            <a class="btn btn-primary m-3" href="{% url 'vehicle-model-list' %}"><i class="fa  fa-book"></i>
+                Vehicle Models</a>
+
+            <button type="button" class="btn btn-danger js-delete-vehicles m-3">
+                <i class="fa fa-trash"></i> Delete Vehicles(s)
+            </button>
+
+
+            <a class="m-3" href="{% url 'vehicle-export-csv' %}"> Export as CSV</a>
+            <a class="m-3" href="{% url 'vehicle-export-json' %}"> Export as JSON</a>
+            <a class="m-3" href="{% url 'vehicle-import' %}"> Import Data</a>
+
+
+        </div>
+
+
+        <div class="m-2 mb-lg-n1 ">
+            {% render_table table %}
+        </div>
+
+
+        {#    <table id="vehicles-table" class="table table-bordered">#}
+        {#        <thead>#}
+        {#            <tr>#}
+        {##}
+        {#            </tr>#}
+        {#        </thead>#}
+        {##}
+        {#    </table>#}
+
+    </div>
+{% endblock content %}
+
+
+

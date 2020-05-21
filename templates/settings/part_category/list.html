@@ -1,0 +1,23 @@
+{% for category in part_categories %}
+
+    <tr>
+    <td>
+        {{ category.name }}
+    </td>
+    <td>
+        <button type="button"
+                class="btn btn-warning btn-sm js-update-part-category"
+                data-url="{% url 'part-category-update' category.id %}">
+            <i class="fa  fa-pencil"></i>Update
+        </button>
+{#    </td>#}
+{#    <td>#}
+        <button type="button"
+                class="btn btn-danger btn-sm js-delete-part-category"
+                data-url="{% url 'part-category-delete' category.id %}">
+            <i class="fa  fa-trash-o"></i>Delete
+        </button>
+
+    </td>
+    </tr>
+{% endfor %}

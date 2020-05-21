@@ -1,0 +1,53 @@
+{% extends "base/base.html" %}
+{% load render_table from django_tables2 %}
+{% load static %}
+{% block content %}
+
+    <h1> {{ vehicle.vehicle_model }}</h1>
+    <p1>
+        <ul>
+            <li>Sku: {{ vehicle.sku }}</li>
+            <li>Vin: {{ vehicle.vin }}</li>
+            <li>Colour: {{ vehicle.colour }}</li>
+            <li>Mileage: {{ vehicle.mileage }}</li>
+            <li>Location: {{ vehicle.location }}</li>
+            <li title="{{ vehicle.get_damage_category_display }}">Category Damage: {{ vehicle.damage_category }}</li>
+            <li>Primary Damage: {{ vehicle.damage_primary }}</li>
+            <li>Secondary Damage: {{ vehicle.damage_secondary }}</li>
+            <li>Cost Price: £{{ vehicle.cost_price }}</li>
+        </ul>
+    </p1>
+
+
+    {% if images %}
+        <div class="row">
+        {% for image in images %}
+{#            <div style="position: relative; width:200px; height:200px;">#}
+            <div class="col-lg-3 col-md-4 col-xs-6"  >
+            <a href="{{ image.img.url }}" target="_blank" class="d-block mb-4 h-100">
+{#                <a href="#" class="d-block mb-4 h-100">#}
+                    <img src="{{ image.img.url }}" class="img-thumbnail" alt="">
+                </a>
+                <form method="post" action="{% url 'vehicle-image-delete' vehicle.pk vehicle.slug image.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger "
+                            style="position: absolute; top: 0; right: 5px">X</button>
+                </form>
+            </div>
+
+        {% endfor %}
+        </div>
+    {% endif %}
+
+
+
+    <a class="fa fa-upload" href="{% url 'vehicle-image-upload' vehicle.pk vehicle.slug %}"> Add Images</a>
+
+    <h2>Parts</h2>
+
+    {% render_table table %}
+{% endblock content %}
+
+{% block jquery %}
+    <script src="{% static 'js/parts/part.js' %}"></script>
+{% endblock %}

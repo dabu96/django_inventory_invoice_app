@@ -1,0 +1,23 @@
+{% for location in locations %}
+
+    <tr>
+    <td>
+        {{ location.name }}
+    </td>
+    <td>
+        <button type="button"
+                class="btn btn-warning btn-sm js-update-location"
+                data-url="{% url 'location-update' location.id %}">
+            <i class="fa  fa-pencil"></i>Update
+        </button>
+{#    </td>#}
+{#    <td>#}
+        <button type="button"
+                class="btn btn-danger btn-sm js-delete-location"
+                data-url="{% url 'location-delete' location.id %}">
+            <i class="fa  fa-trash-o"></i>Delete
+        </button>
+
+    </td>
+    </tr>
+{% endfor %}

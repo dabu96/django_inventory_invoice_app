@@ -1,0 +1,45 @@
+{% extends "base/base.html" %}
+{% block content %}
+
+    {{ part.vehicle_id__vin }}
+    {% if part.side is None %}
+        <h1>Part: {{ part.name }} </h1>
+    {% else %}
+        <h1>Part: {{ part.side }} {{ part.name }}  </h1>
+    {% endif %}
+
+    <h3>Vehicle: {{ part.vehicle }}</h3>
+    <h4>SKU: {{ part.sku }} </h4>
+    <p1>
+        <ul>
+            <li>Condition: {{ part.get_condition_display }}</li>
+            <li>Category: {{ part.category }}</li>
+            <li>Price: £{{ part.selling_price }}</li>
+            <li>Part Number: {{ part.part_number }}</li>
+            <li>Extra info: {{ part.extra_info }}</li>
+        </ul>
+    </p1>
+
+    {% if images %}
+        <div class="row">
+            {% for image in images %}
+                <div class="col-lg-3 col-md-4 col-xs-6">
+                    <a href="{{ image.img.url }}" target="_blank" class="d-block mb-4 h-100">
+                        <img src="{{ image.img.url }}" class="img-thumbnail" alt="">
+                    </a>
+
+                    <form method="post" action="{% url 'part-image-delete' part.id part.slug image.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger"
+                                style="position: absolute; top: 0; right: 10px">X
+                        </button>
+                    </form>
+
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <a class="fa fa-upload" href="{% url 'part-image-upload' part.pk part.slug %}"> Add Images</a>
+
+{% endblock content %}
